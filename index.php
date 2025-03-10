@@ -1,114 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atividade</title>
+    <title>Cadastro de Alunos</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h3>Atividade</h3>
-    
-    <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
-        <label for="texto">Texto:</label>
-        <input type="text" id="texto" name="texto" required>
-        <br><br>
+    <h2>Cadastro de Alunos</h2>
+    <h3>Bruno e Nathaly Atividade 03 - Web mobile</h3>
+    <form action="cadastro.php" method="POST">
+        <label for="nome">Nome:</label>
+        <input type="text" name="nome" required>
+        <br>
+        
+        <label for="matricula">Matrícula:</label>
+        <input type="text" name="matricula" required>
+        <br>
+        
+        <label for="curso">Curso:</label>
+        <input type="text" name="curso" required>
+        <br>
 
-        <label for="numero">Número:</label>
-        <input type="number" id="numero" name="numero" required>
-        <br><br>
-
-        <input type="submit" value="Enviar"/> 
+        <button type="submit">Cadastrar</button>
     </form>
 
-    <?php 
-    function substituirVogais($mensagem) {
-        return preg_replace('/[aeiouAEIOU]/', '*', $mensagem);
-    }
-
-    function ehPrimo($num) {
-        if ($num < 2) return false;
-        for ($i = 2; $i <= sqrt($num); $i++) {
-            if ($num % $i == 0) return false;
+    <h2>Lista de Alunos</h2>
+    <ul>
+        
+        // puxa as funçoes do cadastro php e aplica no formulario html 
+        <?php
+        require "cadastro.php";
+        foreach ($alunos as $aluno) {
+            echo "<li>Nome: {$aluno->getNome()} - Matrícula: {$aluno->getMatricula()} - Curso: {$aluno->getCurso()}</li>";
         }
-        return true;
-    }
+        ?>
+    </ul>
 
-    function ehPalindromo($texto) {
-       $texto = strtolower(str_replace(' ', '', $texto));
-       $invertido = inverterString($texto);
-       return $texto === $invertido;
-    }
 
-    function inverterString($str) {
-        $invertida = ""; 
-        for ($i = strlen($str) - 1; $i >= 0; $i--) {
-            $invertida .= $str[$i]; 
-        }
-        return $invertida;
-    }
-
-    function contarPalavras($frase) {
-        $palavras = explode(" ", trim($frase));
-        $quantidade = count($palavras); 
-        $resultado = "<p><strong>Total de palavras:</strong> $quantidade</p>";
-        foreach ($palavras as $palavra) {
-            $resultado .= "$palavra <br>";
-        }
-        return $resultado;
-    }
-
-    function substituirMultiplosDeTres() {
-        $resultado = "";
-        for ($i = 1; $i <= 20; $i++) {
-            $resultado .= ($i % 3 == 0) ? "x " : "$i ";
-        }
-        return trim($resultado);
-    }
-
-    function somaDigitos($num) {
-        $soma = 0;
-        $numStr = (string)$num; 
-        for ($i = 0; $i < strlen($numStr); $i++) {
-            $soma += intval($numStr[$i]); 
-        }
-        return $soma;
-    }
-
-    function ehPerfeito($num) {
-        if ($num < 2) return false;
-        $soma = 0;
-        for ($i = 1; $i < $num; $i++) {
-            if ($num % $i == 0) {
-                $soma += $i;
-            }
-        }
-        return $soma === $num;
-    }
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $texto = $_POST["texto"]; 
-        $numero = intval($_POST["numero"]); 
-
-        $contagemPalavras = contarPalavras($texto);
-        $textoInvertido = inverterString($texto);
-        $textoModificado = substituirVogais($texto);
-
-        $ehPrimo = ehPrimo($numero) ? "Sim, é um número primo." : "Não, não é um número primo.";
-        $ehPalindromo = ehPalindromo($texto) ? "Sim, é um palíndromo." : "Não, não é um palíndromo.";
-        $numerosSubstituidos = substituirMultiplosDeTres();
-        $somaDosDigitos = somaDigitos($numero);
-        $ehPerfeito = ehPerfeito($numero) ? "Sim, eh um número perfeito." : "Não, não eh um número perfeito.";
-
-        echo "<h3>Resultados:</h3>";
-        echo "<p><strong>Texto com *:</strong> " . htmlspecialchars($textoModificado) . "</p>";
-        echo "<p><strong>Texto invertido:</strong> " . htmlspecialchars($textoInvertido) . "</p>";
-        echo "<p><strong>Contagem de palavras:</strong></p>" . $contagemPalavras;
-        echo "<p><strong>eh primo?</strong> " . $ehPrimo . "</p>";
-        echo "<p><strong>eh palíndromo?</strong> " . $ehPalindromo . "</p>";
-        echo "<p><strong>Números de 1 a 20 (múltiplos de 3 como 'x'):</strong> $numerosSubstituidos</p>";
-        echo "<p><strong>Soma dos dígitos do número:</strong> $somaDosDigitos</p>";
-        echo "<p><strong>eh um número perfeito?</strong> " . $ehPerfeito . "</p>";
-    }
-    ?>
+    
 </body>
+   
 </html>
